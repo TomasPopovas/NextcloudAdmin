@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NC Admin</string>
+
+    <!-- Общие -->
+    <string name="action_save">Сохранить</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_create">Создать</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_add">Добавить</string>
+    <string name="action_back">Назад</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="action_search">Поиск</string>
+    <string name="label_loading">Загрузка…</string>
+    <string name="label_empty">Ничего не найдено</string>
+    <string name="label_error">Ошибка</string>
+    <string name="label_yes">Да</string>
+    <string name="label_no">Нет</string>
+    <string name="label_done">Готово</string>
+
+    <!-- Вход -->
+    <string name="login_title">Подключение к серверу</string>
+    <string name="login_server_hint">https://cloud.example.ru</string>
+    <string name="login_server_label">Адрес сервера</string>
+    <string name="login_button">Войти через браузер</string>
+    <string name="login_waiting">Завершите вход в браузере. Ожидаю подтверждение…</string>
+    <string name="login_cancel">Отменить вход</string>
+    <string name="login_error_not_admin">Учётная запись %1$s не входит в группу admin. Нужны права администратора.</string>
+    <string name="login_error_version">Сервер Nextcloud %1$s не поддерживается. Поддерживаются версии 34 и 35.</string>
+    <string name="login_error_url">Некорректный адрес сервера</string>
+    <string name="login_accounts_title">Сохранённые серверы</string>
+    <string name="login_add_account">Добавить сервер</string>
+    <string name="login_remove_account">Удалить сервер</string>
+    <string name="login_remove_confirm">Удалить %1$s из приложения? App-пароль на сервере останется — отзовите его в настройках безопасности пользователя.</string>
+
+    <!-- Главный экран -->
+    <string name="home_title">Nextcloud Admin</string>
+    <string name="home_users">Пользователи</string>
+    <string name="home_groups">Группы</string>
+    <string name="home_settings">Параметры сервера</string>
+    <string name="home_settings_soon">Этап 2 — скоро</string>
+    <string name="home_switch_account">Сменить сервер</string>
+    <string name="home_server_version">Nextcloud %1$s</string>
+    <string name="home_logged_as">Вы вошли как %1$s</string>
+
+    <!-- Пользователи -->
+    <string name="users_title">Пользователи</string>
+    <string name="users_search_hint">Поиск по имени или логину</string>
+    <string name="users_filter_all">Все</string>
+    <string name="users_filter_enabled">Активные</string>
+    <string name="users_filter_disabled">Заблокированные</string>
+    <string name="users_new">Новый пользователь</string>
+    <string name="users_disabled_badge">Заблокирован</string>
+    <string name="users_load_more">Показать ещё</string>
+
+    <string name="user_login">Логин</string>
+    <string name="user_display_name">Отображаемое имя</string>
+    <string name="user_email">E-mail</string>
+    <string name="user_password">Пароль</string>
+    <string name="user_password_hint">Оставьте пустым, чтобы отправить приглашение по e-mail</string>
+    <string name="user_quota">Квота</string>
+    <string name="user_quota_default">По умолчанию</string>
+    <string name="user_quota_unlimited">Без ограничений</string>
+    <string name="user_quota_custom">Своё значение (например 10 GB)</string>
+    <string name="user_groups">Группы</string>
+    <string name="user_subadmin">Администратор групп</string>
+    <string name="user_language">Язык</string>
+    <string name="user_backend">Бэкенд</string>
+    <string name="user_last_login">Последний вход</string>
+    <string name="user_last_login_never">никогда</string>
+    <string name="user_storage">Хранилище</string>
+    <string name="user_storage_used">Использовано %1$s из %2$s (%3$d%%)</string>
+    <string name="user_storage_used_unlimited">Использовано %1$s</string>
+    <string name="user_enable">Разблокировать</string>
+    <string name="user_disable">Заблокировать</string>
+    <string name="user_delete">Удалить пользователя</string>
+    <string name="user_delete_confirm">Удалить пользователя %1$s вместе со всеми файлами? Это действие необратимо.</string>
+    <string name="user_send_welcome">Отправить приветственное письмо</string>
+    <string name="user_welcome_sent">Письмо отправлено</string>
+    <string name="user_set_password">Сменить пароль</string>
+    <string name="user_new_password">Новый пароль</string>
+    <string name="user_updated">Сохранено</string>
+    <string name="user_created">Пользователь создан</string>
+    <string name="user_deleted">Пользователь удалён</string>
+    <string name="user_add_to_group">Добавить в группу</string>
+    <string name="user_remove_from_group">Убрать из группы %1$s?</string>
+    <string name="user_make_subadmin">Назначить администратором группы</string>
+    <string name="user_phone">Телефон</string>
+    <string name="user_address">Адрес</string>
+    <string name="user_website">Сайт</string>
+
+    <!-- Группы -->
+    <string name="groups_title">Группы</string>
+    <string name="groups_new">Новая группа</string>
+    <string name="group_id">Идентификатор</string>
+    <string name="group_display_name">Отображаемое имя</string>
+    <string name="group_members">Участники: %1$d</string>
+    <string name="group_members_title">Участники</string>
+    <string name="group_rename">Переименовать</string>
+    <string name="group_delete_confirm">Удалить группу %1$s? Пользователи останутся, но потеряют членство в ней.</string>
+    <string name="group_created">Группа создана</string>
+    <string name="group_deleted">Группа удалена</string>
+    <string name="group_add_member">Добавить участника</string>
+    <string name="group_remove_member">Убрать %1$s из группы?</string>
+    <string name="group_protected">Системная группа</string>
+</resources>
