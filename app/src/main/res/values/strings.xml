@@ -39,7 +39,7 @@
     <string name="home_users">Пользователи</string>
     <string name="home_groups">Группы</string>
     <string name="home_settings">Параметры сервера</string>
-    <string name="home_settings_soon">Этап 2 — скоро</string>
+    <string name="home_settings_sub">Общий доступ, безопасность, оформление, приложения, config.php</string>
     <string name="home_switch_account">Сменить сервер</string>
     <string name="home_server_version">Nextcloud %1$s</string>
     <string name="home_logged_as">Вы вошли как %1$s</string>

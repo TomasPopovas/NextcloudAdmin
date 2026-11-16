@@ -29,7 +29,18 @@ class OcsException(
     val isAuthError: Boolean get() = httpCode == 401 || ocsStatus == 997
     val isForbidden: Boolean get() = httpCode == 403 || ocsStatus == 403 || ocsStatus == 998
     val isNotFound: Boolean get() = httpCode == 404 || ocsStatus == 404 || ocsStatus == 101
+
+    /** Сервер требует подтверждение пароля (PasswordConfirmationRequired). */
+    val isPasswordConfirmationRequired: Boolean
+        get() = (httpCode == 403 || ocsStatus == 403) &&
+            (message?.contains("confirmation", ignoreCase = true) == true ||
+                message?.contains("подтвержд", ignoreCase = true) == true)
 }
+
+/** Companion-приложение ncadmin_api не установлено — запись недоступна. */
+class CompanionMissingException : IOException(
+    "Для изменения настроек нужно установить на сервере приложение ncadmin_api (см. server-app/README.md)"
+)
 
 /**
  * Параметр формы: обычное значение либо массив (groups[]=a&groups[]=b).
@@ -47,6 +58,9 @@ fun List<String>.multi(): FormValue = FormValue.Multi(this)
  * совпадают с ocs.meta.statuscode). Возвращает ocs.data как JsonElement.
  *
  * Nextcloud 34 и 35 используют одинаковый Provisioning API, отдельных веток не требуется.
+ *
+ * [confirmHook] вызывается, когда сервер отвечает «требуется подтверждение пароля»;
+ * если он вернул true, запрос повторяется один раз.
  */
 class OcsClient(
     private val http: OkHttpClient,
@@ -55,6 +69,9 @@ class OcsClient(
     private val appPassword: String?,
 ) {
     val json: Json = Json { ignoreUnknownKeys = true; isLenient = true }
+
+    @Volatile
+    var confirmHook: (suspend () -> Boolean)? = null
 
     suspend fun get(path: String, query: Map<String, String> = emptyMap()): JsonElement =
         request("GET", path, query, null)
@@ -69,6 +86,28 @@ class OcsClient(
         request("DELETE", path, emptyMap(), form)
 
     private suspend fun request(
+        method: String,
+        path: String,
+        query: Map<String, String>,
+        form: Map<String, FormValue>?,
+        allowConfirm: Boolean = true,
+    ): JsonElement {
+        return try {
+            execute(method, path, query, form)
+        } catch (e: OcsException) {
+            val hook = confirmHook
+            // Любой 403 на запись считаем кандидатом на «нужно подтверждение пароля»:
+            // текст ошибки может быть локализован, а лишний confirm безвреден.
+            val needsConfirm = e.isPasswordConfirmationRequired || (method != "GET" && e.httpCode == 403)
+            if (allowConfirm && needsConfirm && hook != null && hook()) {
+                request(method, path, query, form, allowConfirm = false)
+            } else {
+                throw e
+            }
+        }
+    }
+
+    private suspend fun execute(
         method: String,
         path: String,
         query: Map<String, String>,
@@ -110,14 +149,18 @@ class OcsClient(
             val meta = ocs?.get("meta")?.let { it as? JsonObject }
             val ocsStatus = meta?.get("statuscode")?.jsonPrimitive?.intOrNull ?: -1
             val ocsMessage = meta?.get("message")?.jsonPrimitive?.contentOrNull
+            // Companion и некоторые контроллеры кладут текст ошибки в data.message
+            val dataMessage = (ocs?.get("data") as? JsonObject)?.get("message")?.jsonPrimitive?.contentOrNull
 
             val ok = resp.isSuccessful && (ocsStatus == 100 || ocsStatus in 200..299 || ocsStatus == -1)
             if (!ok) {
-                val msg = ocsMessage?.takeIf { it.isNotBlank() && it != "OK" }
+                val msg = listOf(dataMessage, ocsMessage)
+                    .firstOrNull { !it.isNullOrBlank() && it != "OK" }
                     ?: when (resp.code) {
                         401 -> "Требуется авторизация (неверный app-пароль?)"
                         403 -> "Недостаточно прав"
                         404 -> "Не найдено"
+                        503 -> "Сервер в режиме обслуживания"
                         else -> "HTTP ${resp.code}"
                     }
                 throw OcsException(resp.code, ocsStatus, msg)

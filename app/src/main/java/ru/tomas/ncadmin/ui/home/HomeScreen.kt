@@ -36,7 +36,7 @@ import ru.tomas.ncadmin.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onUsers: () -> Unit, onGroups: () -> Unit, onSwitchAccount: () -> Unit) {
+fun HomeScreen(onUsers: () -> Unit, onGroups: () -> Unit, onSettings: () -> Unit, onSwitchAccount: () -> Unit) {
     val context = LocalContext.current
     val account = remember { (context.applicationContext as NcAdminApp).container.accounts.current }
 
@@ -71,7 +71,7 @@ fun HomeScreen(onUsers: () -> Unit, onGroups: () -> Unit, onSwitchAccount: () ->
         ) {
             HomeCard(Icons.Default.Person, stringResource(R.string.home_users), null, onUsers)
             HomeCard(Icons.Default.Group, stringResource(R.string.home_groups), null, onGroups)
-            HomeCard(Icons.Default.Settings, stringResource(R.string.home_settings), stringResource(R.string.home_settings_soon), null)
+            HomeCard(Icons.Default.Settings, stringResource(R.string.home_settings), stringResource(R.string.home_settings_sub), onSettings)
         }
     }
 }

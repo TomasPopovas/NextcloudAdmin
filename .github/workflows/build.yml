@@ -2,7 +2,7 @@ name: Build APK
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
 
 permissions:
@@ -54,6 +54,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           cp app/build/outputs/apk/debug/app-debug.apk NcAdmin-debug.apk
-          gh release create "build-${{ github.run_number }}" NcAdmin-debug.apk \
-            --title "NC Admin debug build #${{ github.run_number }}" \
+          gh release create "build-${{ github.run_number }}" --target "${{ github.sha }}" NcAdmin-debug.apk \
+            --title "NC Admin debug build #${{ github.run_number }} (${{ github.ref_name }})" \
             --notes "Debug APK (подписан отладочным ключом), коммит ${{ github.sha }}"

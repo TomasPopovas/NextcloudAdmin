@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>ncadmin_api</id>
+    <name>NC Admin API</name>
+    <summary>Server-side companion for the NC Admin Android app</summary>
+    <description><![CDATA[
+Small OCS API used by the NC Admin Android application.
+
+* Marks the current app-password session as password-confirmed so that the standard
+  Provisioning API write calls (which require `PasswordConfirmationRequired`) work
+  from a mobile client authenticated with an app password + 2FA.
+* Bulk read of app config values.
+* Read/write of an allow-listed subset of `config.php` (mail server, logging, trusted domains, ...).
+* Sending a test e-mail.
+
+All endpoints require a member of the `admin` group.
+    ]]></description>
+    <version>0.1.0</version>
+    <licence>agpl</licence>
+    <author mail="tomas303@gmail.com">Tomas Popovas</author>
+    <namespace>NcAdminApi</namespace>
+    <category>tools</category>
+    <bugs>https://github.com/TomasPopovas/NextcloudAdmin/issues</bugs>
+    <repository>https://github.com/TomasPopovas/NextcloudAdmin</repository>
+    <dependencies>
+        <php min-version="8.1" />
+        <nextcloud min-version="34" max-version="35" />
+    </dependencies>
+</info>
