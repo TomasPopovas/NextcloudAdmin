@@ -2,7 +2,7 @@ package ru.tomas.ncadmin.ui.settings
 
 /**
  * Каталог настроек «Параметры сервера», которые хранятся в appconfig и доступны через
- * Provisioning API. Ключи взяты из apps/settings/lib/Settings/Admin/*.php и
+ * Provisioning API. Ключи взяты из apps/settings/lib/Settings/Admin (PHP) и
  * core/AppInfo/ConfigLexicon (Nextcloud 34/35).
  *
  * Типы значений:
