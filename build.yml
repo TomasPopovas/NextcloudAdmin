@@ -1,0 +1,58 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.11.1
+
+      # Первый запуск: распаковать NextcloudAdmin.zip в корень репозитория,
+      # сгенерировать gradle wrapper и закоммитить исходники.
+      - name: Import sources from archive
+        run: |
+          if [ -f NextcloudAdmin.zip ]; then
+            unzip -q NextcloudAdmin.zip -d _import
+            cp -a _import/NextcloudAdmin/. .
+            rm -rf _import NextcloudAdmin.zip
+            gradle wrapper --gradle-version 8.11.1 --no-daemon
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git add -f gradle/wrapper/gradle-wrapper.jar
+            git commit -m "Import NC Admin sources"
+            git push
+          fi
+
+      - name: Build debug APK
+        run: gradle assembleDebug --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NcAdmin-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk NcAdmin-debug.apk
+          gh release create "build-${{ github.run_number }}" NcAdmin-debug.apk \
+            --title "NC Admin debug build #${{ github.run_number }}" \
+            --notes "Debug APK (подписан отладочным ключом), коммит ${{ github.sha }}"
